@@ -1,0 +1,491 @@
+<!doctype html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nerdloader</title>
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <style>
+    :root{
+      --bg: #050608;
+      --card:#101218;
+      --border:#252935;
+      --text:#f5f5f5;
+      --muted:#a3a7b3;
+
+      /* Nerdloader greens (sampled from logo) */
+      --accent:#AED847;
+      --accent2:#607F30;
+      --accentSoft: rgba(174, 216, 71, 0.14);
+
+      --shadow: 0 14px 40px rgba(0,0,0,0.55);
+      --radius: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top, #121520 0, var(--bg) 52%, var(--bg) 100%);
+      color:var(--text);
+      line-height:1.55;
+      overflow-x:hidden;
+    }
+
+    /* Code rain behind everything */
+    #matrix{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:-1;
+      opacity:0.9;
+    }
+
+    a{ color: var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(5, 6, 8, 0.86);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav{
+      max-width:1100px;
+      margin:0 auto;
+      padding: 0.85rem 1.15rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+    }
+
+    .brand img{
+      height:32px;
+      width:auto;
+      display:block;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:1.1rem;
+      align-items:center;
+      font-size:0.92rem;
+      color:var(--muted);
+    }
+    .nav-links a{ color:var(--muted); }
+    .nav-links a:hover{ color:var(--accent); text-decoration:none; }
+
+    .pill{
+      padding: 0.42rem 0.9rem;
+      border-radius: 999px;
+      border:1px solid rgba(174,216,71,0.22);
+      color: var(--accent);
+      background: rgba(96, 127, 48, 0.12);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+    .pill:hover{
+      border-color: var(--accent);
+      background: var(--accentSoft);
+      text-decoration:none;
+    }
+
+    @media (max-width: 820px){
+      .nav-links{ display:none; }
+    }
+
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding: 1.2rem 1.15rem 3rem;
+    }
+
+    /* Top section (simple + direct) */
+    .top{
+      padding: 1.35rem 0 1.9rem;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+      gap: 0.9rem;
+    }
+
+    .top h1{
+      margin:0;
+      font-size: clamp(1.65rem, 2vw + 1.1rem, 2.3rem);
+      line-height:1.15;
+      letter-spacing: -0.01em;
+    }
+
+    .top p{
+      margin:0;
+      color: var(--muted);
+      max-width: 58rem;
+      font-size: 0.98rem;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.75rem;
+      align-items:center;
+      margin-top: 0.2rem;
+    }
+
+    .btn{
+      border-radius: 999px;
+      padding: 0.66rem 1.15rem;
+      font-size: 0.9rem;
+      cursor:pointer;
+      border:1px solid transparent;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      transition: transform .14s ease-out, box-shadow .14s ease-out, background .14s ease-out, border-color .14s ease-out, color .14s ease-out, filter .14s ease-out;
+      user-select:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.45rem;
+      white-space: nowrap;
+    }
+
+    .btn-primary{
+      background: var(--accent);
+      color: #050608;
+      font-weight: 650;
+    }
+    .btn-primary:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.5);
+      filter: brightness(1.03);
+      text-decoration:none;
+    }
+
+    .btn-outline{
+      background: rgba(16,18,24,0.75);
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-outline:hover{
+      border-color: var(--accent);
+      background: var(--accentSoft);
+      color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+      text-decoration:none;
+    }
+
+    .section{
+      padding: 2.15rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Bigger section titles */
+    .section-title{
+      margin:0 0 0.7rem;
+      font-size: 1.65rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+          color: var(--accent);
+      text-shadow: 0 0 16px rgba(174, 216, 71, 0.12);
+    }
+
+    .section-sub{
+      margin:0 0 1.15rem;
+      color: var(--muted);
+      max-width: 52rem;
+      font-size: 0.96rem;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .card{
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(16,18,24,0.88);
+      padding: 1.05rem 1.05rem 1.0rem;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+      transition: transform .12s ease-out, box-shadow .12s ease-out, border-color .12s ease-out;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      border-color: rgba(174,216,71,0.22);
+    }
+
+    .card h3{
+      margin:0 0 0.35rem;
+      font-size: 1.04rem;
+    }
+
+    .card p{
+      margin:0 0 0.8rem;
+      color: var(--muted);
+      font-size:0.92rem;
+    }
+
+    .download-grid{ display:grid; grid-template-columns: 1fr; gap: 0.75rem; }
+    .download-btn{ width:100%; text-align:center; }
+
+    /* Description list card */
+    dl{ margin: 0; }
+    dt{ margin-top: 0.95rem; }
+    dt:first-child{ margin-top: 0; }
+    dd{ margin: 0.28rem 0 0; color: var(--muted); }
+
+    /* Donate alignment */
+    .donate-wrap{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 0.75rem 0 0.25rem;
+    }
+
+    /* Donate card: keep it compact so the PayPal button doesn't float in a huge box */
+    .donate-card{
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 1.0rem 1.05rem;
+    }
+    .donate-wrap{
+      padding: 0.35rem 0 0.25rem;
+    }
+
+    footer{
+      padding: 1.75rem 1.15rem 2.25rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: rgba(5,6,8,0.92);
+    }
+
+    .footer-inner{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="matrix"></canvas>
+
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <img src="NerdLoader_TNP.png" alt="Nerdloader" />
+      </div>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#downloads">Downloads</a>
+        <a href="#support">Donate</a>
+        <a href="#legal">Legal</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="top">
+      <h1>Welcome to Nerdloader</h1>
+      <p>Enjoy free tools and downloads to help accelerate your entertainment and data organization experience.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#downloads">Downloads</a>
+        <a class="btn btn-outline" href="#support">Donate</a>
+      </div>
+    </section>
+
+    <section id="downloads" class="section">
+      <h2 class="section-title">Downloads</h2>
+      <p class="section-sub">Select a tool below to download.</p>
+
+      <div class="cards">
+        <!-- Alphabetical order -->
+        <article class="card">
+          <h3>NL Comparator</h3>
+          <p>Compare files between directories and generate an inventory list showing matching and unique files.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.Comparator.zip" download>Download</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NL Loader</h3>
+          <p>Automatically downloads all files from a webpage to a chosen folder. Useful for collecting large datasets and media archives.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.Loader.zip" download>Download</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NL MCAT</h3>
+          <p>Automatically converts movie file catalogs into movie-poster-style PDFs for printing or PNGs for digital viewing.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.MCAT.zip" download>Download</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NL MCAT Rescue</h3>
+          <p>A manual helper for NL MCAT that allows you to generate individual movie poster PDFs or PNGs from an IMDb URL or ttID.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.MCAT.Rescue.zip" download>Download</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NL Namer</h3>
+          <p>Edit and cleanup file names at an accelerated rate and in bulk. A great time-saver for mass renaming tasks.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.Namer.zip" download>Download</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NL Zip</h3>
+          <p> A simple tool for unzipping files with the option to create a subfolder per ZIP file named after the archive.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.Zip.zip" download>Download</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="support" class="section">
+      <h2 class="section-title">Donate</h2>
+<p class="section-sub">If you want to support development.</p>
+
+      <div class="card donate-card">
+        
+        <div class="donate-wrap">
+          <div id="donate-button"></div>
+        </div>
+
+        <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+        <script>
+          PayPal.Donation.Button({
+            env: 'production',
+            hosted_button_id: 'F638CE88ZTGDA',
+            image: {
+              src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif',
+              alt: 'Donate with PayPal button',
+              title: 'PayPal - The safer, easier way to pay online!'
+            }
+          }).render('#donate-button');
+        </script>
+      </div>
+
+      <p class="section-sub" style="color: var(--accent); margin-top: 0.65rem; text-align: center; max-width: 520px; margin-left: auto; margin-right: auto; white-space: nowrap; transform: translateX(-22px);">Donors will receive a ZIP password via email to enable access to premium downloads.</p>
+    </section>
+
+    <section id="premium" class="section">
+      <h2 class="section-title">Premium</h2>
+      <p class="section-sub">Premium downloads include early releases, updates, and versions with additional features.</p>
+
+      <div class="cards">
+        <!-- Alphabetical order -->
+        <article class="card">
+          <h3>NL MCAT Suite</h3>
+          <p>Combines NL MCAT and NL MCAT Rescue into a single unified application.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.MCAT.Suite.zip" download>Download</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NL Toolbox</h3>
+          <p>A combined set of NerdLoader tools designed to streamline entertainment archiving and data organization workflows.</p>
+          <div class="download-grid">
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.Toolbox.zip" download>Download</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>NL Zip Pro</h3>
+          <p>An expanded version of NL Zip with additional features and a refined interface.</p>
+          <div class="download-grid">
+            <!-- Using the premium link you provided -->
+            <a class="btn btn-primary download-btn" href="https://github.com/HorusPent/nerdloader-site/releases/download/v1.6.0/NL.Zip.Pro.zip" download>Download</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="legal" class="section">
+      <h2 class="section-title">Legal / Disclaimer</h2>
+      <div class="card">
+        <p>Use at your own risk. You are responsible for complying with all local laws and third-party terms of service when using these tools.</p>
+        <p>These tools are provided for personal use only. You must have the legal right to download any content. Neither Nerdloader nor its contributors endorse or condone copyright infringement.</p>
+        <p><strong>Privacy:</strong> Your email address is collected only upon donation to deliver exclusive ZIP-file passwords. It will never be shared with third parties.</p>
+        <p><strong>Donations:</strong> Donations are voluntary, non-refundable, and not tax-deductible.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> Nerdloader</div>
+      <div>Contact: <span style="color: var(--accent);">contact@nerdloader.com</span></div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Nerdloader-themed code rain
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    const fontSize = 16;
+    function reset() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      const columns = Math.floor(w / fontSize);
+      return Array(columns).fill(1);
+    }
+    let drops = reset();
+    window.addEventListener('resize', () => { drops = reset(); });
+
+    function draw() {
+      ctx.fillStyle = 'rgba(5, 6, 8, 0.08)';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const r = Math.random();
+        const text = (r > 0.985) ? 'NL' : Math.floor(Math.random() * 10).toString();
+
+        const alpha = 0.28 + Math.random() * 0.22;
+        ctx.fillStyle = `rgba(174, 216, 71, ${alpha})`;
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > h && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(draw, 50);
+  </script>
+</body>
+</html>
